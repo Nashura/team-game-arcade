@@ -4,6 +4,7 @@
 #include <ctime>
 #include <locale.h>
 
+void openLuckyBlock();
 void riskyBattle();
 
 // Состояние игры (базовые переменные)
@@ -80,7 +81,7 @@ int main() {
 
         case 3:
             // [РАЗРАБОТЧИК 3: ПОДКЛЮЧИТ РУЛЕТКУ/БОССА (ISSUE #3)]
-            std::cout << "\n[!] Модуль событий еще в разработке (Issue #3).\n";
+			openLuckyBlock();
             break;
 
         case 0:
@@ -101,6 +102,79 @@ int main() {
 
     std::cout << "\n▫ ИГРА ОКОНЧЕНА, ВЫ МЕРТВЫ. Ваш итоговый рекорд: " << score << " очков!\n";
     return 0;
+}
+
+void openLuckyBlock() {
+    int roll = rand() % 20 + 1;
+
+    std::cout << "\n[?] Вы разбиваете загадочный Лаки-блок...\n";
+    std::cout << "Бросок D20: " << roll << "!\n";
+
+    if (roll == 1) {
+        // Критический провал — 5%
+        hp -= 50;
+        if (hp < 0) hp = 0;
+
+        resources /= 2;
+        score /= 2;
+
+        std::cout << "[!!!] КРИТИЧЕСКОЕ ПРОКЛЯТИЕ!\n";
+        std::cout << "Из блока вырвался Иссушитель!\n";
+        std::cout << "-50 HP, потеря половины ресурсов и очков.\n";
+
+        if (hp == 0) {
+            std::cout << "Проклятие оказалось смертельным...\n";
+        }
+    }
+    else if (roll <= 5) {
+        // Неудача — 20%
+        int damage = rand() % 16 + 15;
+        hp -= damage;
+        if (hp < 0) hp = 0;
+
+        std::cout << "[!] Ловушка! Рядом появился заряженный крипер!\n";
+        std::cout << "Вы потеряли " << damage << " HP.\n";
+
+        if (hp == 0) {
+            std::cout << "Вы не пережили взрыв...\n";
+        }
+    }
+    else if (roll <= 10) {
+        // Ресурсы — 25%
+        int reward = rand() % 31 + 20;
+        resources += reward;
+
+        std::cout << "[+] Из блока выпал сундук с припасами!\n";
+        std::cout << "Вы получили " << reward << " ресурсов.\n";
+    }
+    else if (roll <= 15) {
+        // Случайный множитель — 25%
+        int multiplier = rand() % 2 + 2;
+        int bonus = 200 * multiplier;
+        score += bonus;
+
+        std::cout << "[+] Алмазная находка! Множитель награды: x"
+            << multiplier << "!\n";
+        std::cout << "Вы получили " << bonus << " очков.\n";
+    }
+    else if (roll <= 19) {
+        // Удвоение накопленных очков — 20%
+        int bonus = score;
+        score += bonus;
+
+        std::cout << "[++] Благословение тотема! Ваши очки удвоены!\n";
+        std::cout << "Вы получили " << bonus << " очков.\n";
+    }
+    else {
+        // Натуральная двадцатка — 5%
+        score += 2000;
+        resources += 100;
+        hp = 100;
+
+        std::cout << "[!!!] ДЖЕКПОТ! Натуральная двадцатка!\n";
+        std::cout << "Лаки-блок открыл сокровищницу древнего города!\n";
+        std::cout << "+2000 очков, +100 ресурсов, полное восстановление HP!\n";
+    }
 }
 
 void riskyBattle() {
