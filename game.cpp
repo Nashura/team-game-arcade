@@ -55,7 +55,7 @@ int main() {
             else if (resources >= 15) {
                 // Платный/ресурсный качественный отдых
                 resources -= 15;
-                int heal = 30 + (rand() % 21); // Лечение от 30 до 50 HP
+                int heal = 40 + (rand() % 21); // Лечение от 40 до 60 HP
                 hp += heal;
                 if (hp > 100) hp = 100;
                 
